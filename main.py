@@ -1,13 +1,13 @@
 import tkinter as tk
 
 def getinput():
-    #try:
+    try:
         txt = int(inputtxt.get(1.0, "end-1c"))
         print(txt)
         info = lookup(id, 'products.txt')
         productinfo.config(text=info)
-    #except:
-     #   print('enter valid integer ID')
+    except:
+        print('enter valid integer ID')
 
 def lookup(item, productfile):
     file = open(productfile)
