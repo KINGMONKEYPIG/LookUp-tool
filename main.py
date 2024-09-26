@@ -1,13 +1,16 @@
 import tkinter as tk
+from tkinter import ttk
+from tkinter import messagebox
 import csv
 
 def getinput():
     txt = str(inputtxt.get(1.0, "end-1c"))
-    #print(txt)
     info = lookup(txt, 'PriceList.csv')
-    productinfo.config(state='normal')
-    productinfo.insert(tk.END, info)
-    productinfo.config(state='disable')
+    try:
+        productinfo.insert(parent='',index=tk.END, values=info[0:3])
+    except:
+        messagebox.showerror('Invalid Input', 'Entered Product ID number could not be found')
+    
 
 def lookup(item, productfile):
     with open(productfile, 'r', encoding='utf-8') as file:
@@ -15,7 +18,7 @@ def lookup(item, productfile):
         for row in csvreader:
             if row[0] == item:
                 print(row)
-                return str(row)+'\n'
+                return row
 
 
 root=tk.Tk()
@@ -32,8 +35,14 @@ inputtxt.pack()
 submit = tk.Button(root, text='submit', command=getinput) 
 submit.pack()
 
-productinfo=tk.Text(root, height = 30, width = 200, font=('Helvetica',8))
+productinfo=ttk.Treeview(root, columns=('id', 'description', 'rrp'), show='headings', height=20)
+productinfo.column('id', width=100)
+productinfo.column('description', width =600)
+productinfo.column('rrp', width=75, anchor=tk.E)
+productinfo.heading('id', text='Item No')
+productinfo.heading('description', text='Product Description')
+productinfo.heading('rrp', text='RRP')
 productinfo.pack()
-productinfo.config(state=tk.DISABLED)
+
 
 root.mainloop()
