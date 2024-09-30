@@ -3,14 +3,26 @@ from tkinter import ttk
 from tkinter import messagebox
 import csv
 
+def add():
+    total = 0.0
+
+    for child in productinfo.get_children():
+        total += float(productinfo.item(child, 'values')[2])
+    return total
+
 def getinput():
     txt = str(inputtxt.get(1.0, "end-1c"))
     info = lookup(txt, 'PriceList.csv')
     try:
         productinfo.insert(parent='',index=tk.END, values=info[0:3])
     except:
-        messagebox.showerror('Invalid Input', 'Entered Product ID number could not be found')
+        if txt == '':
+            messagebox.showerror('Invalid Input', 'Please enter a product ID')
+        else:
+            messagebox.showerror('Invalid Input', 'Entered Product ID number could not be found')
     inputtxt.delete(1.0, tk.END)
+    pricesum=str(add())
+    price.config(text='Total: £'+pricesum)
     
 
 def lookup(item, productfile):
@@ -18,7 +30,6 @@ def lookup(item, productfile):
         csvreader = csv.reader(file)
         for row in csvreader:
             if row[0] == item:
-                print(row)
                 return row
 
 
@@ -47,5 +58,7 @@ productinfo.heading('description', text='Product Description')
 productinfo.heading('rrp', text='RRP')
 productinfo.pack()
 
+price = tk.Label(root, text='Total: £0.0')
+price.pack()
 
 root.mainloop()
