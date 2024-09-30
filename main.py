@@ -10,6 +10,7 @@ def getinput():
         productinfo.insert(parent='',index=tk.END, values=info[0:3])
     except:
         messagebox.showerror('Invalid Input', 'Entered Product ID number could not be found')
+    inputtxt.delete(1.0, tk.END)
     
 
 def lookup(item, productfile):
@@ -24,12 +25,14 @@ def lookup(item, productfile):
 root=tk.Tk()
 
 root.title('Garmin Product Lookup')
-root.geometry('1280x720')
+root.geometry('800x720')
 
 label = tk.Label(root, text='Enter Product ID:')
 label.pack()
 
-inputtxt = tk.Text(root, height = 1, width = 30) 
+inputtxt = tk.Text(root, height = 1, width = 30, wrap = 'none') 
+inputtxt.bind('<Return>', 'break')
+inputtxt.bind('<KeyRelease-Return>', 'break')
 inputtxt.pack() 
 
 submit = tk.Button(root, text='submit', command=getinput) 
